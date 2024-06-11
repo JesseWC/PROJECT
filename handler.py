@@ -1,38 +1,24 @@
 import pygame
 import time
 
-from Ball import Ball
-from Goal import Goal
-from Avatar import Avatar
+from .Classes.Ball import Ball
+from .Classes.Goal import Goal
+from .Classes.Avatar import Avatar
 
-
-
-score=0
+score = 0
 # set up pygame modules
 pygame.init()
 pygame.font.init()
-font2=pygame.font.SysFont('calibri', 35)
+font2 = pygame.font.SysFont('calibri', 35)
 font = pygame.font.SysFont('comicsansms', 50)
-displayintro=font.render("Click Anywhere To Continue", True, (255, 255, 255))
-displayscore=font2.render("Score: "+ str(score), True, (255, 255, 255))
-intro_over=False
+displayintro = font.render("Click Anywhere To Continue", True, (255, 255, 255))
+displayscore = font2.render("Score: "+ str(score), True, (255, 255, 255))
+intro_over = False
 # set up variables for the display
 size = (800, 500)
 screen = pygame.display.set_mode(size)
 
-
-
-
 a=Goal(40,40)
-
-
-
-
-
-
-
-
-
 
 running = True
 while running:
