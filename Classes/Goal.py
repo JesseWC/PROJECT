@@ -1,3 +1,4 @@
+import os
 import pygame
 
 
@@ -5,9 +6,11 @@ import pygame
 
 class Goal:
     def __init__(self, x, y):
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(script_dir, '..', 'Assets', 'Goal.png')
         self.x = x
         self.y = y
-        self.image = pygame.image.load("./Assets/Goal.png")
+        self.image = pygame.image.load(image_path)
         self.image_size = self.image.get_size()
         self.rect = pygame.Rect(self.x, self.y, self.image_size[0], self.image_size[1])
 
