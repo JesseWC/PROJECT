@@ -16,20 +16,33 @@ running = True
 score = 0
 intro_over = False
 script_dir = os.path.dirname(os.path.abspath(__file__))
-background_image_path = os.path.join(script_dir, '..', 'Assets', 'Field.jpg')
+background_image_path = os.path.join(script_dir, '.', 'Assets', 'Field.jpg')
 
-background = pygame.image.load(background_image_path)
+background = pygame.image.load(background_image_path)\
+
+background = pygame.transform.rotate(background, 90)  # Rotate the background image 90 degrees
+size = (800, 500)
+background = pygame.transform.scale(background, size)
 font = pygame.font.SysFont('comicsansms', 50)
 font2 = pygame.font.SysFont('calibri', 35)
 displayintro = font.render("Click Anywhere To Continue", True, (255, 255, 255))
 displayscore = font2.render("Score: "+ str(score), True, (255, 255, 255))
-size = (800, 500)
+
 screen = pygame.display.set_mode(size)
-a = Goal(40,40)
+a = Goal(650, 150, 200, 200, 270)
+b = Ball(500, 215, 50, 50, 0)  # Ensure to initialize with appropriate arguments if needed
+c = Avatar(400, 165, 100, 100, 0)
 
 while running:
-    screen.fill((255, 0, 255))
-    screen.blit(displayintro, (75, 200))
+    screen.fill((255, 255, 255))
+    screen.blit(background, [0,0])
+    screen.blit(a.image, a.rect)
+    screen.blit(b.image, b.rect)
+    screen.blit(c.image, c.rect)
+    
+
+
+    
 
     for event in pygame.event.get():  
         pygame.display.update()
@@ -40,7 +53,4 @@ while running:
         if intro_over==True:
             screen.blit(displayscore, (0, 0))
 
-
-screen.blit(a.image, a.rect)
-#screen.blit(b.image, b.rect)
-#screen.blit(c.image, c.rect)
+    pygame.display.update()
