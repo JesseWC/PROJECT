@@ -3,7 +3,7 @@ import pygame
 
 
 
-class Ball:
+class Goal:
     def __init__(self, x, y):
         self.x = x
         self.y = y

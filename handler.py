@@ -1,9 +1,14 @@
+import sys
+import os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import pygame
 import time
 
-from .Classes.Ball import Ball
-from .Classes.Goal import Goal
-from .Classes.Avatar import Avatar
+from Classes.Ball import Ball
+from Classes.Goal import Goal
+from Classes.Avatar import Avatar
 
 score = 0
 # set up pygame modules
