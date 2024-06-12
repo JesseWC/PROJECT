@@ -18,6 +18,7 @@ pygame.font.init()
 # Flags and initial states
 running = False
 intro_over = False
+ball_moving = False
 
 # Get the script directory and set the background image path
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -58,13 +59,13 @@ def get_user_input():
 # Function to move sprites based on difficulty
 def moveSprites():
     global direction
-    speed = 1
+    speed = 3
     if difficulty == "E":
-        speed = 1
-    elif difficulty == "M":
-        speed = 2
-    elif difficulty == "D":
         speed = 3
+    elif difficulty == "M":
+        speed = 4
+    elif difficulty == "D":
+        speed = 5
 
     dy = speed if direction == 'down' else -speed
     avatar.rect.y += dy
@@ -78,21 +79,20 @@ def moveSprites():
 
 # Function to reset ball position
 def reset_ball():
+    global ball_moving
+    ball_moving = False
     ball.move(avatar.rect.x + 75, avatar.rect.y + 50)
 
 def animate_ball():
     global score
-    while ball.rect.x < goal.rect.x:
-        ball.move(ball.rect.x + 1, ball.rect.y)
-        pygame.display.update()
-        pygame.event.pump()  # Process Pygame events to keep the window responsive
+    if ball.rect.x < goal.rect.x:
+        ball.move(ball.rect.x + 6, ball.rect.y)
         if ball.rect.x >= goal.rect.x:
             if ball.rect.colliderect(goal.rect):
                 score += 1
                 reset_ball()
             else:
                 reset_ball()
-            break
 
 # Start the input thread
 input_thread = threading.Thread(target=get_user_input)
@@ -102,18 +102,24 @@ input_thread.start()
 start_time = time.time()  # Initialize start time
 direction = 'down'  # Initialize movement direction
 
-# Initial render of texts
-displayscore = font2.render(f"Score: {score}", True, (0, 0, 0))  # Black text for visibility
+# Initial render of timer text
+# Black text for visibility
 displaytimer = font2.render(f"Time Left: {60} seconds", True, (0, 0, 0))  # Initial timer text
 
 clock = pygame.time.Clock()  # Create a clock object to control frame rate
 
 while True:
+    # Initial render of score text
+    # Black text for visibility
+    displayscore = font2.render(f"Score: {score}", True, (0, 0, 0))
+
     screen.fill((255, 255, 255))
     screen.blit(background, [0, 0])
     screen.blit(goal.image, goal.rect)
     screen.blit(ball.image, ball.rect)
     screen.blit(avatar.image, avatar.rect)
+    screen.blit(displayscore, (0, 0))
+    screen.blit(displaytimer, (0, 40))
 
     if running:
         current_time = time.time()
@@ -136,13 +142,13 @@ while True:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RIGHT:  # Check if right arrow key is pressed
+                if event.key == pygame.K_RIGHT: # Check if right arrow key is pressed
                 # Animate the ball towards the goal
                     target_x = goal.rect.x
-                    animate_ball()
+                    ball_moving = True
 
-    screen.blit(displayscore, (0, 0))
-    screen.blit(displaytimer, (0, 40))  # Display the timer
+        if ball_moving:
+            animate_ball()
 
     pygame.display.update()
     clock.tick(60)  # Run the loop at 60 frames per second
