@@ -2,7 +2,7 @@ import os
 import pygame
 
 class Avatar:
-    def __init__(self, x, y, width=None, height=None, angle=0):
+    def __init__(self, x, y, width = None, height = None, angle = 0):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(script_dir, '..', 'Assets', 'Avatar.png')
         self.x = x
@@ -18,7 +18,7 @@ class Avatar:
             self.image = pygame.transform.rotate(self.image, angle)
         
         self.image_size = self.image.get_size()
-        self.rect = self.image.get_rect(topleft=(self.x, self.y))
+        self.rect = self.image.get_rect(topleft = (self.x, self.y))
 
 
     def move(self, new_x, new_y):
