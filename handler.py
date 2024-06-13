@@ -50,6 +50,7 @@ avatar = Avatar(300, 165, 100, 100, 0)
 displayintro = font1.render("Click E, M, or D to Select Difficulty", True, (255,255,255))
 instructions = font3.render("Click E for Easy, Click M for Medium and D for Difficult", True, (255,255,255))
 instructions2 = font3.render("Use the Right Arrow Key to Shoot the Ball!", True, (255, 255, 0))
+high_score_text = font2.render(f"High Score: {high_score}", True, (255, 255, 255))
 gamename = title_font.render("SOCCERMAN", True, (255,0,255))
 displayscore = font2.render(f"Score: {score}", True, (255,255,255))
 displaytimer = font2.render(f"Time Left: {60} seconds", True, (255,255,255))
@@ -122,10 +123,11 @@ def introduction_screen():
     intro_running = True
     while intro_running:
         screen.fill((0,0,0))
-        screen.blit(displayintro, (150, 200))
-        screen.blit(instructions, (150, 250))
-        screen.blit(instructions2, (150, 290))
-        screen.blit(gamename, (225, 0))
+        screen.blit(displayintro, (150, 150))
+        screen.blit(instructions, (150, 200))
+        screen.blit(instructions2, (150, 240))
+        screen.blit(gamename, (250, 70))
+        screen.blit(high_score_text, (150, 280))
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -158,10 +160,10 @@ def game_over_screen():
     retry_text = font1.render("Press R to Retry", True, (255, 255, 255)) #has option to quit or retry game
     quit_text = font1.render("Press Q to Quit", True, (255, 255, 255))
 
-    screen.blit(game_over_text, (300, 200))
-    screen.blit(game_over_score, (300, 250))
-    screen.blit(retry_text, (300, 300))
-    screen.blit(quit_text, (300, 350))
+    screen.blit(game_over_text, (300, 100))
+    screen.blit(game_over_score, (300, 150))
+    screen.blit(retry_text, (300, 200))
+    screen.blit(quit_text, (300, 250))
 
     pygame.display.update()
 
