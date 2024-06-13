@@ -28,6 +28,7 @@ title_font = pygame.font.SysFont("pristina", 50)
 running = False
 ball_moving = False
 score = 0
+high_score = 0
 seconds_timer = 0
 direction = ''
 difficulty = ""
