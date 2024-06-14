@@ -275,7 +275,7 @@ while True:
         if ball_moving:
             animate_ball() #animates the ball toward the goal
         
-        if seconds_timer >= 5:
+        if seconds_timer >= 60:
             game_over_screen() #if 60 seconds have elspased, the game over screen is presented, game ended
 
     pygame.display.update()
