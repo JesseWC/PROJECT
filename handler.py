@@ -108,26 +108,47 @@ def initialize_game():
     seconds_timer = 0 #timer is set to 0
     start_time = time.time()
 
+# function to update the high score by using a text file
+# def high_score_update():
+#     global score, high_score
+#     file_path = 'scores.txt'
+    
+#     with open(file_path, 'r') as file:
+#         file_contents = file.readline().strip()
+
+#     if file_contents == '':
+#         # File is empty, write '0' to it and set high score to game score
+#         with open(file_path, 'w') as file:
+#             file.write(str(score))
+#         high_score = score
+#     else:
+#         # Convert file_contents to an integer and compare with score
+#         if int(file_contents) < score:
+#             # Update file with the new score
+#             with open(file_path, 'w') as file:
+#                 file.write(str(score))
+#             high_score = score
+#             # Set score to 0
 def high_score_update():
     global score, high_score
-    file_path = 'scores.txt'
-    
-    with open(file_path, 'r') as file:
-        file_contents = file.readline().strip()
+    file_path = os.path.join(os.path.dirname(__file__), 'scores.txt')
 
-    if file_contents == '':
-        # File is empty, write '0' to it and set high score to game score
-        with open(file_path, 'w') as file:
-            file.write(str(score))
-        high_score = score
+    # Ensure the file exists and read the high score
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            file_contents = file.readline().strip()
+            if file_contents.isdigit():
+                high_score = int(file_contents)
+            else:
+                high_score = 0
     else:
-        # Convert file_contents to an integer and compare with score
-        if int(file_contents) < score:
-            # Update file with the new score
-            with open(file_path, 'w') as file:
-                file.write(str(score))
-            high_score = score
-            # Set score to 0
+        high_score = 0
+
+    # Update the high score if the current score is higher
+    if score > high_score:
+        high_score = score
+        with open(file_path, 'w') as file:
+            file.write(str(high_score))
 
 # Function to update timer
 def update_timer():
