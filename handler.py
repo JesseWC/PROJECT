@@ -50,9 +50,9 @@ avatar = Avatar(300, 165, 100, 100, 0)
 displayintro = font1.render("Click E, M, or D to Select Difficulty", True, (255,255,255))
 instructions = font3.render("Click E for Easy, Click M for Medium and D for Difficult", True, (255,255,255))
 instructions2 = font3.render("Use the Right Arrow Key to Shoot the Ball!", True, (255, 255, 0))
+displayscore = font2.render(f"Score: {score}", True, (0,0,0))
 high_score_text = font2.render(f"High Score: {high_score}", True, (255, 255, 255))
 gamename = title_font.render("SOCCERMAN", True, (255,0,255))
-displayscore = font2.render(f"Score: {score}", True, (255,255,255))
 displaytimer = font2.render(f"Time Left: {60} seconds", True, (255,255,255))
 
 # Function to move sprites based on difficulty, higher difficulty= higher speed
@@ -66,7 +66,6 @@ def move_sprites():
         speed = 7
     else:
         speed = 5
-
 
     dy = speed if direction == 'down' else -speed
     avatar.rect.y += dy
@@ -108,6 +107,27 @@ def initialize_game():
     running = True
     seconds_timer = 0 #timer is set to 0
     start_time = time.time()
+
+def high_score_update():
+    global score, high_score
+    file_path = 'scores.txt'
+    
+    with open(file_path, 'r') as file:
+        file_contents = file.readline().strip()
+
+    if file_contents == '':
+        # File is empty, write '0' to it and set high score to game score
+        with open(file_path, 'w') as file:
+            file.write(str(score))
+        high_score = score
+    else:
+        # Convert file_contents to an integer and compare with score
+        if int(file_contents) < score:
+            # Update file with the new score
+            with open(file_path, 'w') as file:
+                file.write(str(score))
+            high_score = score
+            # Set score to 0
 
 # Function to update timer
 def update_timer():
@@ -152,6 +172,8 @@ def game_over_screen():
     
     running = False  # Stop the main game loop
 
+    high_score_update() # Update high score
+
     screen.fill((0, 0, 0))  # Fill the screen with black
 
     # Render game over text and score
@@ -164,6 +186,7 @@ def game_over_screen():
     screen.blit(game_over_score, (300, 150))
     screen.blit(retry_text, (300, 200))
     screen.blit(quit_text, (300, 250))
+    screen.blit(high_score_text, (300, 300))
 
     pygame.display.update()
 
@@ -171,15 +194,18 @@ def game_over_screen():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                score = 0
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     # Restart the game
                     reset_game() #calls function to reset game
+                    score = 0
                     return
                 elif event.key == pygame.K_q:
                     # Quit the game
+                    score = 0
                     pygame.quit()
                     sys.exit()
 
@@ -193,7 +219,7 @@ def reset_game():
     move_sprites()
     running = False
     ball_moving = False
-    score = 0
+    high_score_update()
     seconds_timer = 0
     start_time = time.time()
     direction = ''
@@ -215,9 +241,10 @@ initialize_game()
 clock = pygame.time.Clock()  # Create a clock object to control frame rate
 # Main game loop
 while True:
-    # Initial render of score text
+    # Initial render of score and high score text
     displayscore = font2.render(f"Score: {score}", True, (0,0,0))
-
+    high_score_text = font2.render(f"High Score: {high_score}", True, (255, 255, 255))
+    
     screen.fill((0,0,0))
     screen.blit(background, [0, 0])
     screen.blit(goal.image, goal.rect)
@@ -228,6 +255,7 @@ while True:
 
     if running:
         update_timer()
+        high_score_update()
         time_left = max(0, 60 - seconds_timer)
         displaytimer = font2.render(f"Time Left: {time_left} seconds", True, (0,0,0)) #displays the time
 
@@ -247,7 +275,7 @@ while True:
         if ball_moving:
             animate_ball() #animates the ball toward the goal
         
-        if seconds_timer >= 60:
+        if seconds_timer >= 5:
             game_over_screen() #if 60 seconds have elspased, the game over screen is presented, game ended
 
     pygame.display.update()
